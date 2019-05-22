@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<title>后台管理</title>
+<!--<link href="https://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">-->
+<script src="https://cdn.bootcss.com/jquery/2.2.3/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+
+<!-- 引入bootstrap-table样式-->
+<link href="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.css" rel="stylesheet">
+
+<link th:href="@{css/bootstrap-editable.css}" rel="stylesheet" />
+<script th:src="@{js/bootstrap-editable.min.js}"></script>
+<script th:src="@{js/bootstrap-edit.js}"></script>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" rel="stylesheet" type="text/css">
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" type="text/javascript"></script>
+
+<!-- 引入中文语言包-->
+<script src="https://cdn.bootcss.com/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
+
+
+
+</head>
+<script>
+$(function () {
+	//删除编辑操作
+	function operation(value, row, index) {
+		// var id = value;
+		// var result = "";
+		// result += "<a href='javascript:;' class='btn btn-xs green' onclick=\"EditViewById('" + id + "', view='view')\" title='查看'><span class='glyphicon glyphicon-search'></span></a>";
+		// result += "<a href='javascript:;' class='btn btn-xs blue' onclick=\"EditViewById('" + id + "')\" title='编辑'><span class='glyphicon glyphicon-pencil'></span></a>";
+		// result += "<a href='javascript:;' class='btn btn-xs red' onclick=\"DeleteByIds('" + id + "')\" title='删除'><span class='glyphicon glyphicon-remove'></span></a>";
+		return[
+
+		'<button id="delete" type="button" class="delete btn btn-default  btn-sm" title="删除"><span class="glyphicon glyphicon-trash"></span></button>',
+		].join('')
+
+
+	}
+
+	window.operateEvents = {
+		'click #delete':function(e,value,row,index) {
+
+
+
+
+                                                          		$.ajax({
+                                                          			url:"admin/delete",
+                                                          			type:'POST',
+                                                          			data:JSON.stringify(row),
+
+                                                          			headers: {
+                                                                     "content-Type":"application/json;charset=utf-8"
+                                                                      },
+                                                          			success:function(data){
+                                                          				if (data.success){
+                                                          					toastr.success("删除成功!");
+                                                          				} else
+                                                          				{
+                                                          					toastr.error("删除失败!");
+                                                          				}
+                                                          			},
+                                                          			error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                                          				alert("ajax异常:"+errorThrown);
+                                                          			}
+                                                          		})
+
+
+							}};
+
+
+
+										$('#mytab1').bootstrapTable({
+											method : 'get',
+											url : "user/usermanagement",//请求路径
+											toolbar: '#toolbar',
+											striped : true, //是否显示行间隔色
+
+
+											cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+											pagination: true,                   //是否显示分页（*）
+											sortable: true,                     //是否启用排序
+											sortOrder: "asc",                   //排序方式
+											sidePagination: "client",           //分页方式：client客户端分页，server服务端分页（*）
+											pageNumber: 1,                      //初始化加载第一页，默认第一页,并记录
+											pageSize: 4,                     //每页的记录行数（*）
+											pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+											search: true,                      //是否显示表格搜索
+											strictSearch: true,
+											showColumns: true,                  //是否显示所有的列（选择显示的列）
+											showRefresh: true,                  //是否显示刷新按钮
+											minimumCountColumns: 2,             //最少允许的列数
+											clickToSelect: true,                //是否启用点击选中行
+											//height: 500,                      //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+											uniqueId: "userName",                     //每一行的唯一标识，一般为主键列
+											showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
+											cardView: false,                    //是否显示详细视图
+											detailView: false,                  //是否显示父子表
+											queryParams : function(params) {//上传服务器的参数
+												var temp = {//如果是在服务器端实现分页limitoffset这两个参数是必须的
+													name:$('#search_name').val(),
+													tel:$('#search_room').val()
+
+												};
+												return temp;
+												},
+
+												columns : [
+
+													{
+														title : '用户姓名',
+														field : 'userName',
+
+														editable: {
+															type: 'text',
+															title: '用户名',
+															validate: function (v) {
+																if (!v) return '用户名不能为空';
+															}
+														}
+														},
+														{
+															title : '员工编号',
+															field : 'empCode',
+															sortable : true
+															}, {
+																title : '部门',
+																field : 'departmentId',
+																editable: {
+																	type: 'select',
+																	title: '部门',
+																	source: function () {
+																		var result = [];
+																		$.ajax({
+																			url: 'user/GetDepartments',
+																			async: false,
+																			type: "get",
+																			data: {},
+																			success: function (data, status) {
+																				$.each(data, function (key, value) {
+																					result.push({ value: value.departmentId, text: value.departmentName });
+																					});
+																			}
+																			});
+																		return result;
+																	}
+																	},
+																	sortable: true,
+																	},
+																	{
+																		title : '入职时间',
+																		field : 'jobJointime',
+																		sortable: true,
+																		// formatter: function (value, row, index) {
+																			//                     var date = eval('new ' + eval(value).source)
+																			//                     return date.format("yyyy-MM-dd");
+																			//                 },
+																			editable: {
+																				type: 'date',
+																				title: '入职时间'
+																			}
+																			},
+																			{
+																				title : '描述',
+																				field : 'personDes',
+																				// formatter : formatfile,//对返回的数据进行处理再显示
+																				width: 600,
+																				editable: {
+																					type: 'text',
+																					title: '描述',
+																					validate: function (v) {
+																						if (!v) return '描述不能为空';
+																					}
+																				}
+
+																				},
+																				{
+																					title : '手机',
+																					field : 'personPhone',
+																					// formatter : formatfile,//对返回的数据进行处理再显示
+																					editable: {
+																						type: 'text',
+																						title: '手机',
+																						validate:function(v){
+																							if (isNaN(v)) return '手机必须是数字';
+																							if(v.length!=11) return '手机位数错误'
+																						}
+																					}
+																					},
+																					{
+																						title : '邮箱',
+																						field : 'personEmail',
+																						// formatter : formatfile,//对返回的数据进行处理再显示
+																						editable: {
+																							type: 'text',
+																							title: '邮箱',
+																							validate:function (v) {
+																								if (!v) return '邮箱不能为空';
+																								if(!v.match(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/))
+																								{
+																									return "格式不正确!请重新输入";
+
+																								}
+																							}
+
+																						}
+																						},
+																						{
+																							title : '用户状态',
+																							field : 'userStatus',
+
+																							formatter : formatstatus,//对返回的数据进行处理再显示
+
+																							},
+
+
+
+
+																							{
+																								title : '操作',
+																								field : 'operate',
+																								width: 120,
+																								align: 'center',
+																								valign: 'middle',
+																								events:operateEvents,
+																								formatter : operation//对资源进行操作
+																							}
+																							],
+																							 onEditableSave: function (field, row, oldValue, $el) {
+
+
+
+                                                                                                            $.ajax({
+                                                                                                                type: "post",
+                                                                                                                url: "admin/edit",
+                                                                                                                data: JSON.stringify(row),
+
+                                                                                                                headers: {
+                                                                                                                "content-Type":"application/json;charset=utf-8"
+                                                                                                                 },
+                                                                                                                success: function (data) {
+                                                                                                                    if (data.success) {
+                                                                                                                       toastr.success("修改成功!");
+                                                                                                                    }
+                                                                                                                },
+                                                                                                                error: function () {
+                                                                                                                   toastr.error("修改失败");
+                                                                                                                },
+                                                                                                                complete: function () {
+
+                                                                                                                }
+
+                                                                                                            });
+                                                                                                        }
+
+																							})
+
+//value代表该列的值row代表当前对象
+function formatfile(value, row, index) {
+	return "<a href='" + value + "' title='单击打开连接' target='_blank'>" +"文件下载" + "</a>";
+
+}
+function  formatstatus(value, row, index){
+	if(value==2)
+	{
+		return"<span class=\'label label-danger\'>"+"管理员"+"</span>"
+	}
+	else if(value==1)
+	{
+		return"<span class=\'label label-warning\'>"+"高级用户"+"</span>"
+	}
+	else if(value==0)
+	{
+		return"<span class=\'label label-success\'>"+"普通用户"+"</span>"
+	}
+}
+
+
+
+
+//查询按钮事件
+$('#search_btn').click(function() {
+	$('#mytab1').bootstrapTable('refresh', {
+		url : 'user/usermanagement'
+		});
+	})
+
+
+
+
+})
+</script>
+
+<script>
+ $(document).ready(function(){
+
+
+               		})
+</script>
+
+<!--必须使用较新版本的BootStrap才有如下效果-->
+
+<body>
+<!--<div id="myTabContent" class="tab-content" style="padding: 110px 0px 0px 100px">
+
+       <div class="tab-pane fade in active button" id="tab2">
+          <button type="button" class="btn btn-success dropdown-toggle" id="addRowbtn" >
+           <span class="glyphicon glyphicon  glyphicon-plus" aria-hidden="true"></span>增加
+         </button>
+         <button type="button" class="btn btn-warning" onclick="javascript:update()">
+              <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>修改
+         </button>
+         <button type="button" class="btn btn-info" onclick="javascript:sava()" id="sava">
+              <span class=" glyphicon glyphicon-floppy-save" aria-hidden="true"></span>保存
+         </button>
+       </div>
+    </div>-->
+
+<div align="center" style="padding: 100px 70px 300px 90px;
+max-width: 1600px;
+margin: 0;">
+<div class="panel-body">
+<table id="mytab1" class="table table-hover"></table>
+</div>
+</div>
+</div>
+
+</body>
+
+</html>

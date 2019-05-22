@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>后台管理</title>
+	<!--<link href="https://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">-->
+	<script src="https://cdn.bootcss.com/jquery/2.2.3/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	<!-- 引入bootstrap-table样式-->
+	<link href="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.css" rel="stylesheet">
+
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" rel="stylesheet" type="text/css">
+
+
+	<script src="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" type="text/javascript"></script>
+
+	<!-- 引入中文语言包-->
+	<script src="https://cdn.bootcss.com/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
+
+</head>
+<style  type="text/css">
+.glyphicon-thumbs-up{
+            color:#4ca450;
+
+        }
+        .glyphicon-thumbs-down{
+        color:coral;
+
+
+        }
+</style>
+<script>
+	$(function () {
+                  //删除编辑操作
+                  function operation(value, row, index) {
+                                                  // var id = value;
+                                                  // var result = "";
+                                                  // result += "<a href='javascript:;' class='btn btn-xs green' onclick=\"EditViewById('" + id + "', view='view')\" title='查看'><span class='glyphicon glyphicon-search'></span></a>";
+                                                  // result += "<a href='javascript:;' class='btn btn-xs blue' onclick=\"EditViewById('" + id + "')\" title='编辑'><span class='glyphicon glyphicon-pencil'></span></a>";
+                                                  // result += "<a href='javascript:;' class='btn btn-xs red' onclick=\"DeleteByIds('" + id + "')\" title='删除'><span class='glyphicon glyphicon-remove'></span></a>";
+                                                  return[
+                                                  '<button id="pass" type="button" class="pass btn btn-default  btn-sm" title="通过"><span class="glyphicon  glyphicon-thumbs-up"></span></button>',
+                                                  '<button id="fire" type="button" class="fire btn btn-default  btn-sm" title="拒绝"><span class="glyphicon glyphicon-thumbs-down"></span></button>'
+                                                  ].join('')
+
+
+                                              }
+
+                                              window.operateEvents = {
+                                              	'click #pass':function(e,value,row,index) {
+
+                                              		var data={};
+                                              		data.affairsId = row.affairsId;
+                                              		data.affairsStatus = 1;
+                                              		var formData = new FormData();
+                                              		formData.append("status",JSON.stringify(data));
+
+                                              		$.ajax({
+                                              			url:"http://localhost:8080/meeting/admin/update",
+                                              			type:'POST',
+                                              			data:formData,
+                                              			dataType:'json',
+                                              			contentType:false,
+                                              			processData:false,
+                                              			cache:false,
+                                              			success:function(data){
+                                              				if (data.success){
+                                              					toastr.success("审批成功!");
+                                              				} else
+                                              				{
+                                              					toastr.error("操作失败!");
+                                              				}
+                                              			},
+                                              			error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                              				alert("ajax异常:"+errorThrown);
+                                              			}
+                                              		})
+
+                                              	},
+
+                                              	'click #fire':function(e,value,row,index) {
+
+
+                                              		var data={};
+                                              		data.affairsId = row.affairsId;
+                                              		data.affairsStatus = -1;
+                                              		var formData = new FormData();
+                                              		formData.append("status",JSON.stringify(data));
+
+                                              		$.ajax({
+                                              			url:"http://localhost:8080/meeting/admin/update",
+                                              			type:'POST',
+                                              			data:formData,
+                                              			dataType:'json',
+                                              			contentType:false,
+                                              			processData:false,
+                                              			cache:false,
+                                              			success:function(data){
+                                              				if (data.success){
+                                              					toastr.success("拒绝申请成功!");
+                                              				} else
+                                              				{
+                                              					toastr.error("操作失败!");
+                                              				}
+                                              			},
+                                              			error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                              				alert("ajax异常:"+errorThrown);
+                                              			}
+                                              		})
+                                              	}
+                                              };
+                                              $('#mytab').bootstrapTable({
+                                              	method : 'get',
+                                    url : "admin/appcheck",//请求路径
+                                    toolbar: '#toolbar',
+                                    striped : true, //是否显示行间隔色
+
+
+                                                   cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                                                   pagination: true,                   //是否显示分页（*）
+                                                   sortable: true,                     //是否启用排序
+                                                   sortOrder: "asc",                   //排序方式
+                                                   sidePagination: "client",           //分页方式：client客户端分页，server服务端分页（*）
+                                                   pageNumber: 1,                      //初始化加载第一页，默认第一页,并记录
+                                                   pageSize: 4,                     //每页的记录行数（*）
+                                                   pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+                                                   search: true,                      //是否显示表格搜索
+                                                   strictSearch: true,
+                                                   showColumns: true,                  //是否显示所有的列（选择显示的列）
+                                                   showRefresh: true,                  //是否显示刷新按钮
+                                                   minimumCountColumns: 2,             //最少允许的列数
+                                                   clickToSelect: true,                //是否启用点击选中行
+                                                   //height: 500,                      //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                                                   uniqueId: "affairsId",                     //每一行的唯一标识，一般为主键列
+                                                   showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
+                                                   cardView: false,                    //是否显示详细视图
+                                                   detailView: false,                  //是否显示父子表
+                                    queryParams : function(params) {//上传服务器的参数
+                                        var temp = {//如果是在服务器端实现分页limitoffset这两个参数是必须的
+                                        	name:$('#search_name').val(),
+                                        	tel:$('#search_room').val()
+
+                                        };
+                                        return temp;
+                                    },
+
+                                    columns : [
+                                    {
+                                    	title : '申请编号',
+                                    	field : 'affairsId',
+                                    	sortable : true
+                                    }, {
+                                    	title : '用户姓名',
+                                    	field : 'userName',
+                                    	sortable : true
+                                    }, {
+                                    	title : '参与人数',
+                                    	field : 'participate',
+                                    	sortable: true
+                                    },
+                                    {
+                                    	title : '会议室',
+                                    	field : 'roomName',
+                                    	sortable: true
+                                    },
+                                    {
+                                    	title : '文件',
+                                    	field : 'file',
+                                        formatter : formatfile,//对返回的数据进行处理再显示
+                                    },
+                                    {
+                                    	title : '开始时间',
+                                    	field : 'arrangementPeriodstart',
+                                    	sortable: true
+                                    },
+                                    {
+                                    	title : '结束时间',
+                                    	field : 'arrangementPeriodend',
+                                    	sortable: true
+                                    },
+                                    {
+                                    	title : '申请时间',
+                                    	field : 'createTime',
+                                    	sortable: true
+                                    },
+                                    {
+                                    	title : '操作',
+                                    	field : 'operate',
+                                    	width: 120,
+                                    	align: 'center',
+                                    	valign: 'middle',
+                                    	events:operateEvents,
+                                        formatter : operation//对资源进行操作
+                                    }
+                                    ]
+                                })
+
+                                 //value代表该列的值row代表当前对象
+                                 function formatfile(value, row, index) {
+                                                  if(row.file!='无'){
+                                 	return "<a href='" + 'http://localhost:8080/meeting/user/Download?file='+row.file +'&useName='+ row.userName+"' title='单击打开连接' target='_blank'>" + "文件下载" + "</a>";
+
+                                 }
+                                                  else{
+                                                      return "<span>无</span>"
+                                                  }
+                                                  }
+
+
+
+
+                                 //查询按钮事件
+                                 $('#search_btn').click(function() {
+                                 	$('#mytab').bootstrapTable('refresh', {
+                                 		url : 'admin/appcheck'
+                                 	});
+                                 })
+
+
+
+
+                             })
+                         </script>
+
+                     <!--必须使用较新版本的BootStrap才有如下效果-->
+
+                     <body>
+                     	<!--<div class="container">
+
+                     		<div class="row" style="padding-top: 45px">
+                     			<div class="row">
+
+                     				<div class="col-md-10">-->
+
+                     					<div align="center" style="padding: 100px 70px 300px 90px;
+                                                                   	max-width: 1200px;
+                                                                   	margin: 0;">
+                     						<div class="panel-body">
+                     							<table id="mytab" class="table table-hover"></table>
+                     						</div>
+                     					</div><!--
+                     				</div>
+                     			</div>
+                     			<div class="row">
+                     				<div class="col-md-12">
+                     					<div align="center" style="padding-top: 200px">
+
+                     					</div>
+                     				</div>
+                     			</div>-->
+                     		</div>
+                     	</div>
+                     </body>
+
+                     </html>

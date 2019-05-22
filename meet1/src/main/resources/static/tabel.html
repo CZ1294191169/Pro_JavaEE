@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>application</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{Wizard/node_modules/bootstrap/dist/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{Wizard/css/bootstrap-datetimepicker.min.css}">
+    <link rel="stylesheet" th:href="@{Wizard/css/fileinput.min.css}">
+    <link rel="stylesheet" th:href="@{Wizard/css/styles.css}">
+    <link rel="stylesheet" th:href="@{Wizard/css/bootstrapValidator.css}">
+    <!-- <link href="../css/fileinput.css" media="all" rel="stylesheet" type="text/css"/> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" media="all" rel="stylesheet" type="text/css"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" rel="stylesheet" type="text/css">
+
+    <link th:href="@{Wizard/css/theme.css}" media="all" rel="stylesheet" type="text/css"/>
+    <!--  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> -->
+
+
+    <!-- <link rel="stylesheet" href="./css/progressBar.css"> -->
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation"> <!-- start nav -->
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"                   aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a id="goback" href="#" class="navbar-brand">返回</a>
+
+
+
+
+
+
+            </div>
+        </div>
+    </nav>  <!-- end nav -->
+
+    <div class="container">
+        <h1 class="wizardMargin text-center">会议申请流程</h1>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="progress" id="bar">
+                    <div class="progress-bar progress-bar-striped progress-bar-danger active" role="progressbar" ></div>
+                </div>
+
+                <ul class="nav nav-pills nav-justified">
+                    <li class="active"><a href="#1a" data-toggle="tab">申请用户信息</a></li>
+                    <li><a href="#2a" data-toggle="tab">会议主题</a></li>
+                    <li><a href="#3a" data-toggle="tab">会议室名称</a></li>
+                    <li><a href="#4a" data-toggle="tab">会议安排时间</a></li>
+                    <li><a href="#5a" data-toggle="tab">会议文件</a></li>
+                </ul>
+                <div class="tab-content clearfix">
+                    <div class="tab-pane active" id="1a">   <!-- start first tab-pane -->
+
+                        <form id="defaultForm1"  class="form-horizontal" action="">
+                                        <div class="form-group">
+                                            <label class="col-lg-3 control-label">用户账号</label>
+                                            <div class="col-lg-5">
+                                                <input type="text" class="form-control" name="code" autocomplete="off" id="userCode"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-lg-3 control-label">用户姓名</label>
+                                            <div class="col-lg-5">
+                                                <input type="text" class="form-control" name="name" autocomplete="off"  id="userName"/>
+                                            </div>
+                                        </div>
+
+                                            <div class="form-group">
+                                            <label class="col-lg-3 control-label">参与人数</label>
+                                            <div class="col-lg-5">
+                                                <input type="text" class="form-control" name="num" autocomplete="off"  id="participate"/>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                    </div>  <!-- end tab-pane 1 -->
+                    <div class="tab-pane" id="2a">  <!-- start second tab-pane -->
+                        <form id="defaultForm2">
+                            <h2>Theme</h2>
+                            <div class="form-group col-lg-6 active">
+                                <label for="ime">会议主题</label>
+                                <!-- input type="textar" class="form-control"> -->
+                                <!--<textareaRRReol class="form-control" rows="7"></textarea>-->
+                                    <textarea  class="form-control" rows="10" cols="10" placeholder="主题相关.." id="theme"></textarea>
+                                </div>
+                            </form>
+                        </div>  <!-- end tab-pane 2 -->
+                        <div class="tab-pane" id="3a">  <!-- start third tab-pane -->
+                            <form>
+                                <h2>Roomname</h2>
+                                <div class="form-group col-lg-6 active">
+                                    <label for="ime">会议室名称</label>
+                                    <select class="form-control" id="menu">
+
+                                    		</select>
+
+
+                                </div>
+                            </form>
+                        </div>  <!-- end tab-pane 3 -->
+                        <div class="tab-pane" id="4a">  <!-- start fourth tab-pane -->
+                            <form>
+                                <h2>会议安排时间</h2>
+                                <div class="form-group">
+                                    <label class="control-label col-md-6">会议开始时间</label>
+                                    <div class="col-md-4">
+                                        <input class="form-control input-inline input-sm form_datetime"
+                                        name="tradeTime" id="startTime" size="12" type="text" placeholder="会议开始时间"
+                                        data-date-format="yyyy-mm-dd HH:mm:SS"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-6">会议结束时间</label>
+                                    <div class="col-md-4">
+                                       <input class="form-control input-inline input-sm form_datetime"
+                                       name="tradeTime" id="endTime" size="12" type="text" placeholder="会议结束时间"
+                                       data-date-format="yyyy-mm-dd HH:mm:SS"/>
+                                   </div>
+                               </div>
+
+                           </form>
+                       </div>  <!-- end tab-pane 4 -->
+                       <div class="tab-pane" id="5a">  <!-- start fifth tab-pane -->
+                           <form class="form" action="#" method="post" enctype="multipart/form-data"  id="pollutionForm">
+
+                               文件:<input type="file" class="file" id="img" multiple name="file"><br>
+                           </form>
+
+                            <button class="form-control col-md-6" type="submit" id="submit">提交</button>
+                       </div>  <!-- end tab-pane 5 -->
+                   </div>  <!-- end tab-content -->
+               </div>
+           </div>  <!-- end row -->
+       </div>  <!-- end container -->
+
+       <script th:src="@{jquery.min.js}"></script>
+       <script th:src="@{Wizard/bootstrapValidator.js}" type="text/javascript"></script>
+       <script th:src="@{js/bootstrap.min.js}"></script>
+       <script th:src="@{Wizard/bootstrap-datetimepicker.min.js}"></script>
+       <script th:src="@{Wizard/sortable.js}" type="text/javascript"></script>
+       <script th:src="@{Wizard/fileinput.js}" type="text/javascript"></script>
+       <script th:src="@{Wizard/fr.js}" type="text/javascript"></script>
+       <script th:src="@{Wizard/es.js}" type="text/javascript"></script>
+       <script th:src="@{Wizard/theme.js}" type="text/javascript"></script>
+       <script th:src="@{Wizard/themes.js}" type="text/javascript"></script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" type="text/javascript"></script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" type="text/javascript"></script>
+
+   <script>
+    var Data = [];
+     var pass ;
+
+    $("#img").fileinput({
+        language : 'zh',
+        uploadUrl : "user/updateFile",
+        showUpload: true, //是否显示上传按钮
+        showRemove : true, //显示移除按钮
+        showPreview : true, //是否显示预览
+        showCaption: false,//是否显示标题
+        autoReplace : true,
+        minFileCount: 0,
+        uploadAsync: true,
+        maxFileCount: 10,//最大上传数量
+        browseOnZoneClick: true,
+        msgFilesTooMany: "选择上传的文件数量 超过允许的最大数值!",
+        enctype: 'multipart/form-data',
+        // overwriteInitial: false,//不覆盖已上传的图片
+        allowedFileExtensions : ['jpg', 'gif', 'png','doc','docx','pdf','ppt','pptx','txt'],
+        browseClass : "btn btn-primary", //按钮样式
+        previewFileIcon : "<i class='glyphicon glyphicon-king'></i>",
+        previewFileIconSettings: {
+            'doc': '<i class="fa fa-file-word-o text-primary"></i>',
+            'xls': '<i class="fa fa-file-excel-o text-success"></i>',
+            'ppt': '<i class="fa fa-file-powerpoint-o text-danger"></i>',
+            'jpg': '<i class="fa fa-file-photo-o text-warning"></i>',
+            'pdf': '<i class="fa fa-file-pdf-o text-danger"></i>',
+            'zip': '<i class="fa fa-file-archive-o text-muted"></i>',
+            'htm': '<i class="fa fa-file-code-o text-info"></i>',
+            'txt': '<i class="fa fa-file-text-o text-info"></i>',
+            'mov': '<i class="fa fa-file-movie-o text-warning"></i>',
+            'mp3': '<i class="fa fa-file-audio-o text-warning"></i>',
+        },
+        previewFileExtSettings: {
+            'doc': function(ext) {
+                return ext.match(/(doc|docx)$/i);
+            },
+            'xls': function(ext) {
+                return ext.match(/(xls|xlsx)$/i);
+            },
+            'ppt': function(ext) {
+                return ext.match(/(ppt|pptx)$/i);
+            },
+            'zip': function(ext) {
+                return ext.match(/(zip|rar|tar|gzip|gz|7z)$/i);
+            },
+            'htm': function(ext) {
+                return ext.match(/(php|js|css|htm|html)$/i);
+            },
+            'txt': function(ext) {
+                return ext.match(/(txt|ini|md)$/i);
+            },
+            'mov': function(ext) {
+                return ext.match(/(avi|mpg|mkv|mov|mp4|3gp|webm|wmv)$/i);
+            },
+            'mp3': function(ext) {
+                return ext.match(/(mp3|wav)$/i);
+            }}
+    }).on("fileuploaded", function(e, data) {//文件上传成功的回调函数,还有其他的一些回调函数,比如上传之前...
+        var res = data.response;
+        console.log(res)
+        pass = res.data.path;
+        Data.push({
+            "path": res.data.path,
+            "date":res.data.date
+        });
+        console.log(Data);
+
+    })
+
+    $(document).on('click','#submit',function() {
+        var info={};
+        info.userName = $('#userName').val();
+        info.userCode = $('#userCode').val();
+        var options=$('#menu option:selected');
+        info.roomId=options.val();
+        info.theme = $('#theme').val();
+        info.participate = $('#participate').val();
+
+
+
+        info.file = 'FILE/'+pass;
+
+           info.arrangementPeriodstart =  $("#startTime").val();
+
+
+        info.arrangementPeriodend = $('#endTime').val();
+        var formData = new FormData();
+
+
+        formData.append("info",JSON.stringify(info));
+
+        $.ajax({
+                    url:"http://localhost:8080/meeting/app/insert",
+                        type:'POST',
+                        data:formData,
+                        dataType:'json',
+                        contentType:false,
+                        processData:false,
+                        cache:false,
+                        success:function(data){
+                            if (data.success){
+                               toastr.success("申请成功!");
+                            } else
+                            {
+                                toastr.error("申请失败!");
+                            }
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            alert("ajax异常:"+errorThrown);
+                        }
+        })
+
+
+
+    })
+
+</script>
+<script>
+    var percent = 20;
+    $(".progress-bar").css({
+     "width": percent + "%"
+ });
+    $(document).on('click', '.nav-pills li', function() {
+     $(".nav-pills li").removeClass("active");
+     $(this).addClass("active");
+     percent = ($(this).index() + 1) * 20;
+     $(".progress-bar").css({
+         "width": percent + "%"
+     });
+
+     if(percent === 100){
+        $(".progress-bar").removeClass("progress-bar-danger");
+        $(".progress-bar").addClass("progress-bar-success")
+    } else {
+        $(".progress-bar").addClass("progress-bar-danger");
+    }
+});
+
+</script>
+<script>
+//     $(".form_datetime").datetimepicker({
+//     autoclose: true,   //选择后自动关闭当前时间控件
+//     format: "yyyy-mm-dd hh:ii:ss" //时间格式
+// });
+
+            $(".form_datetime").datetimepicker({
+                language: "zh-CN",
+                autoclose: true,//选中之后自动隐藏日期选择框
+                clearBtn: true,//清除按钮
+                todayBtn: true,//今日按钮
+                format: "yyyy-mm-dd hh:ii:ss"//日期格式，详见 http://bootstrap-datepicker.readthedocs.org/en/release/options.html#format
+            });
+
+</script>
+<script>
+ $(document).ready(function(){
+    $.getJSON("http://localhost:8080/meeting/app/init",function(data) {
+        if(data.success){
+            var list = data.meetroomlist;
+            var user = data.user;
+        var tempHtml='';
+        list.map(function(item,index) {
+          tempHtml+='<option value="'+
+          item.roomId+'">'+item.roomName+'</option>';
+        })
+        $('#userName').val(user.userName);
+        $("#userName").attr("disabled","disabled");
+        $('#userCode').val(user.userCode);
+        $("#userCode").attr("disabled","disabled");
+        $('#menu').html(tempHtml);
+        $("#menu option[id='"+list.roomId+"']").attr("selected","selected");
+        }
+        else {
+            alert("faile!")
+        }
+
+    })
+
+})
+</script>
+
+<script>
+       $('#goback').click(function() {
+                     //location.href("/meeting/person");
+                     window.location.href="/meeting/person";
+
+       })
+</script>
+</body>
+
+</html>

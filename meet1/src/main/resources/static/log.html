@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Login</title>
+
+  <!-- Bootstrap core CSS -->
+  <link th:href="@{vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+
+  <!-- Custom fonts for this template
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Merriweather:300,300i,400,400i,700,700i,900,900i" rel="stylesheet">-->
+  <link th:href="@{vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
+
+  <!-- Custom styles for this template -->
+  <link th:href="@{css/coming-soon.min.css}" rel="stylesheet">
+
+  <!--===============================================================================================-->
+  <link rel="icon" type="image/png" th:href="@{images/icons/favicon.ico}"/>
+  <!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" th:href="@{vendor/bootstrap/css/bootstrap.min.css}">
+  <!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" th:href="@{fonts/font-awesome-4.7.0/css/font-awesome.min.css}">
+  <!--===============================================================================================-->
+  <!--<link rel="stylesheet" type="text/css" th:href="@{fonts/Linearicons-Free-v1.0.0/icon-font.min.css}">-->
+  <!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" th:href="@{vendor/animate/animate.css}">
+  <!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" th:href="@{vendor/css-hamburgers/hamburgers.min.css}">
+  <!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" th:href="@{vendor/animsition/css/animsition.min.css}">
+  <!--===============================================================================================-->
+  <!--<link rel="stylesheet" type="text/css" th:href="@{vendor/select2/select2.min.css}">-->
+  <!--===============================================================================================-->
+  <!--<link rel="stylesheet" type="text/css" th:href="@{vendor/daterangepicker/daterangepicker.css}">-->
+  <!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" th:href="@{css/util.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{css/main.css}">
+  <!--===============================================================================================-->
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" rel="stylesheet" type="text/css">
+
+  <script th:src="@{vendor/jquery/jquery-3.2.1.min.js}"></script>
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" type="text/javascript"></script>
+
+
+
+
+
+</head>
+
+<style type="text/css">
+
+</style>
+
+<body>
+
+  <div class="overlay"></div>
+  <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
+    <!--<source src="mp4/hey.mp4" type="video/mp4">-->
+    </video>
+
+    <div class="masthead">
+        <div class="masthead-bg"></div>
+        <div class="container h-100">
+          <div class="row h-100">
+            <div class="col-12 my-auto">
+              <div class="masthead-content text-white py-5 py-md-0">
+                <h1 class="mb-3">Corporate System</h1>
+                <p class="mb-5">这是 <strong>beta 5.0</strong> 版本我们将在后续继续进行版本的迭代！</p>
+
+          <div class="limiter">
+            <div class="container-login100">
+              <div class="wrap-login100 p-b-160 p-t-50">
+                <form class="login100-form validate-form"  th:action="@{/check}" method="post">
+
+                  <div class="wrap-input100 rs1 validate-input" data-validate = "Username is required">
+                    <input name="usercode" class="input100" type="text" >
+                    <span class="label-input100">Username</span>
+                </div>
+
+
+                <div class="wrap-input100 rs2 validate-input" data-validate="Password is required">
+                    <input name="password" class="input100" type="password" >
+                    <span class="label-input100">Password</span>
+                </div>
+
+                <div class="container-login100-form-btn">
+                    <button type="submit" class="login100-form-btn" name="submit">
+                      Sign in
+                  </button>
+              </div>
+
+
+    </form>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!--<div class="social-icons">
+    <ul class="list-unstyled text-center mb-0">
+      <li class="list-unstyled-item">
+        <a href="#">
+          <i class="fab fa-windows"></i>
+      </a>
+  </li>
+  <li class="list-unstyled-item">
+    <a href="#">
+      <i class="fab fa-linux"></i>
+  </a>
+</li>
+<li class="list-unstyled-item">
+    <a href="#">
+      <i class="fab fa-ubuntu"></i>
+  </a>
+</li>
+</ul>
+</div>-->
+
+
+<!--===============================================================================================-->
+<script th:src="@{vendor/jquery/jquery-3.2.1.min.js}"></script>
+<!--===============================================================================================-->
+
+<script type="text/javascript" th:inline="javascript">
+
+       //    $(document).ready(function(){
+       //
+       //
+       //   // alert("hey");
+       //    var basePath = [[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]];
+       //
+       //
+       //  var user={};
+       //   $('#submit').click(function(){
+       //
+       //                 var username = $('#usercode').val();
+       //
+       //                 var pwd = $('#password').val();
+       //
+       //                 var formData=new FormData();
+       //
+       //                 user.userCode = username;
+       //
+       //                 user.loginPassword = pwd;
+       //
+       //                 formData.append("user",JSON.stringify(user));
+       //        $.ajax({
+       //            type: 'post',
+       //            dataType: 'json',
+       //            url: 'http://localhost:8080/meeting/check',
+       //            data: formData,
+       //            contentType:false,
+       //            processData:false,
+       //            cache: false,
+       //            async: true,
+       //            success: function (data) {
+       //                alert(data.success);
+       //                if (data.success){
+       //                  $.toast('提交成功!');
+       //                  } else
+       //                   {
+       //                    $.toast('提交失败!');
+       //                }
+       //
+       //            },
+       //            error: function (XMLHttpRequest, textStatus, errorThrown) {
+       //                                                      alert("ajax异常:"+errorThrown);
+       //                                                  }
+       //        });
+       //    });
+       // });
+
+   </script>
+   <!--<script th:src="@{vendor/animsition/js/animsition.min.js}"></script>-->
+   <!--===============================================================================================-->
+   <!--<script th:src="@{vendor/bootstrap/js/popper.js}"></script>-->
+   <script th:src="@{vendor/bootstrap/js/bootstrap.min.js}"></script>
+   <!--===============================================================================================-->
+   <!--<script th:src="@{vendor/select2/select2.min.js}"></script>-->
+   <!--===============================================================================================-->
+  <!-- <script th:src="@{vendor/daterangepicker/moment.min.js}"></script>-->
+  <!-- <script th:src="@{vendor/daterangepicker/daterangepicker.js}"></script>-->
+   <!--===============================================================================================-->
+   <!--<script th:src="@{vendor/countdowntime/countdowntime.js}"></script>-->
+   <!--===============================================================================================-->
+   <script th:src="@{js/main.js}"></script>
+
+   <!-- Bootstrap core JavaScript -->
+   <script th:src="@{vendor/jquery/jquery.min.js}"></script>
+   <script th:src="@{vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+   <!-- Custom scripts for this template -->
+   <script th:src="@{js/coming-soon.min.js}"></script>
+
+
+
+
+</body>
+
+</html>

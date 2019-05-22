@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script th:src="@{jquery.min.js}" type="text/javascript"></script>
+  	<!--<script src="https://www.chartjs.org/dist/master/Chart.min.js" type="text/javascript"></script>-->
+      <script type="text/javascript" th:src="@{echarts.js}"></script>
+
+
+</head>
+<body>
+
+    <div id="main" style="width: 900px;height:600px;"></div>
+    <script type="text/javascript">
+
+        var myChart = echarts.init(document.getElementById('main'));
+
+
+        // 指定图表的配置项和数据
+       var option = {
+    title : {
+        text: '会议室使用情况',
+        subtext: '',
+        x:'center'
+    },
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    legend: {
+        x : 'center',
+        y : 'bottom',
+        data:[]
+    },
+    toolbox: {
+        show : true,
+        feature : {
+            mark : {show: true},
+            dataView : {show: true, readOnly: false},
+            magicType : {
+                show: true,
+                type: ['pie', 'funnel']
+            },
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    calculable : true,
+    series : [
+        {
+            name:'详细',
+            type:'pie',
+            radius : [20, 200],
+            center : ['50%', '50%'],
+            roseType : 'radius',
+            label: {
+                normal: {
+                    show: false
+                },
+                emphasis: {
+                    show: true
+                }
+            },
+            lableLine: {
+                normal: {
+                    show: false
+                },
+                emphasis: {
+                    show: true
+                }
+            },
+            data:[]
+            }
+        // },
+        // {
+        //     name:'面积模式',
+        //     type:'pie',
+        //     radius : [30, 110],
+        //     center : ['75%', '50%'],
+        //     roseType : 'area',
+        //     data:[
+        //
+        //     ]
+        // }
+    ]
+};
+       myChart.setOption(option);
+       myChart.showLoading();
+       $.ajax({
+       type: "get",
+       url: "admin/chartsone",
+       cache : false,//禁用缓存
+       dataType: "json",
+      success: function(result) {
+      var names=[];//定义两个数组
+       var brower = [];
+       // $.each(result.list,function(index,item){
+       //   names.push(item.roomName);
+       // brower.push({
+       // name: item.roomName,
+       // value: item.roomNum
+       // });
+
+        result.list.map(function(item,index) {
+          names.push(item.roomName);
+           brower.push({
+                  name:item.roomName,
+                  value:item.roomNum
+                  })
+        })
+
+
+       //});
+       myChart.hideLoading();
+      myChart.setOption({
+      legend: {
+      data: names
+
+      },
+      series: [{
+      data: brower,
+
+      }]
+       });
+      },
+
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+        alert("查询失败");
+        }
+        });
+
+        // 使用刚指定的配置项和数据显示图表
+      //  myChart.setOption(option);
+    </script>
+    <br>
+    <br>
+    <br>
+
+    <hr>
+
+     <div id="maintwo" style="width: 900px;height:600px;"></div>
+
+
+
+    <script>
+
+      var myChart1 = echarts.init(document.getElementById('maintwo'));
+    var colors = ['#5793f3', '#d14a61', '#675bba'];
+
+
+    var option1 = {
+        color: colors,
+
+        tooltip: {
+            trigger: 'none',
+            axisPointer: {
+                type: 'cross'
+            }
+        },
+        legend: {
+            data:['2019 会议安排时间统计','2019 会议安排年月统计']
+        },
+        grid: {
+            top: 70,
+            bottom: 50
+        },
+        xAxis: [
+            {
+                type: 'category',
+                axisTick: {
+                    alignWithLabel: true
+                },
+                axisLine: {
+                    onZero: false,
+                    lineStyle: {
+                        color: colors[1]
+                    }
+                },
+                axisPointer: {
+                    label: {
+                        formatter: function (params) {
+                            return '会议安排次数  ' + params.value
+                                + (params.seriesData.length ? '：' + params.seriesData[0].data : '');
+                        }
+                    }
+                },
+                data: []
+
+            },
+            {
+                type: 'category',
+                axisTick: {
+                    alignWithLabel: true
+                },
+                axisLine: {
+                    onZero: false,
+                    lineStyle: {
+                        color: colors[0]
+                    }
+                },
+                axisPointer: {
+                    label: {
+                        formatter: function (params) {
+                            return '会议安排次数  ' + params.value
+                                + (params.seriesData.length ? '：' + params.seriesData[0].data : '');
+                        }
+                    }
+                },
+                data: []
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value'
+            }
+        ],
+        series: [
+            {
+                name:'2019 会议安排时间统计',
+                type:'line',
+                xAxisIndex: 1,
+                smooth: true,
+                data: []
+            },
+            {
+                name:'2019 会议安排年月统计',
+                type:'line',
+                smooth: true,
+                data: []
+            }
+        ]
+    };
+     myChart1.setOption(option1);
+           myChart1.showLoading();
+           $.ajax({
+                  type: "get",
+                  url: "admin/chartstwo",
+                  cache : false,//禁用缓存
+                  dataType: "json",
+                 success: function(result) {
+                 var names=[];//定义两个数组
+                  var nums = [];
+                  var names1=[];
+                  var nums1=[];
+                  var options = myChart1.getOption();
+                  // $.each(result.list,function(index,item){
+                  //   names.push(item.roomName);
+                  // brower.push({
+                  // name: item.roomName,
+                  // value: item.roomNum
+                  // });
+
+                   result.list.map(function(item,index) {
+                     names.push(item.name);
+                      nums.push(
+                             item.num
+                             )
+                   })
+                   result.ymdlist.map(function(item,index) {
+                                        names1.push(item.name);
+                                         nums1.push(
+                                                item.num
+                                                )
+                                      })
+                    options.series[0].data=nums1;
+                   options.xAxis[0].data=names1;
+                    options.series[1].data = nums;
+                    options.xAxis[1].data=names;
+                  //});
+                  myChart1.hideLoading();
+
+                 // myChart1.setOption({
+                 //
+                 // series:{
+                 //     data:nums
+                 // },
+                 // xAxis: {
+                 // data: names
+                 //
+                 // }
+                 //  });
+                 myChart1.setOption(options);
+                 },
+
+                   error: function(XMLHttpRequest, textStatus, errorThrown) {
+                   alert("查询失败");
+                   }
+                   });
+</script>
+
+ <br>
+    <br>
+    <br>
+
+    <hr>
+
+<div id="mainthree" style="width: 900px;height:600px;"></div>
+ <script>
+
+      var myChart2 = echarts.init(document.getElementById('mainthree'));
+      var option2 = {
+              title: {
+                  text: '申请频率',
+                  subtext: ''
+              },
+              tooltip: {
+                  trigger: 'axis',
+                  axisPointer: {
+                      type: 'shadow'
+                  }
+              },
+              legend: {
+                  data: ['2019年']
+              },
+              grid: {
+                  left: '3%',
+                  right: '4%',
+                  bottom: '3%',
+                  containLabel: true
+              },
+              xAxis: {
+                  type: 'value',
+                  boundaryGap: [0, 0.01]
+              },
+              yAxis: {
+                  type: 'category',
+                  data: []
+              },
+              series: [
+                  {
+                      name: '2019年',
+                      type: 'bar',
+                      data: []
+                  },
+                  // {
+                  //     name: '2012年',
+                  //     type: 'bar',
+                  //     data: [19325, 23438, 31000, 121594, 134141, 681807]
+                  // }
+              ]
+          };
+       myChart2.setOption(option2);
+                 myChart2.showLoading();
+
+                  $.ajax({
+                        type: "get",
+                        url: "admin/chartsthree",
+                        cache : false,//禁用缓存
+                        dataType: "json",
+                       success: function(result) {
+                        var name=[];
+                        var brower = [];
+                        // $.each(result.list,function(index,item){
+                        //   names.push(item.roomName);
+                        // brower.push({
+                        // name: item.roomName,
+                        // value: item.roomNum
+                        // });
+
+                          result.list.map(function(item,index) {
+                                  name.push(item.userName);
+                                   brower.push(item.num)
+                                })
+
+
+                        //});
+                        myChart2.hideLoading();
+                       myChart2.setOption({
+                       yAxis: {
+                       data: name
+
+                       },
+                       series: {
+                       data: brower,
+
+                       }
+                        });
+                       },
+
+                         error: function(XMLHttpRequest, textStatus, errorThrown) {
+                         alert("查询失败");
+                         }
+                         });
+
+</script>
+
+</body>
+</html>

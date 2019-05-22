@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title></title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <!--FullCalendar CSS-->
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.2.0/fullcalendar.min.css' rel='stylesheet' />
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.2.0/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+    <!--jQuery/jQuery-ui/moment-->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.js'></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js'></script>
+    <!--FullCalendar/本地脚本js-->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.2.0/fullcalendar.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.2.0/locale/zh-cn.js'></script>
+    <script type="text/javascript">
+
+    $(document).ready(function() {
+
+        var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+
+
+
+        var calendar = $('#calendar').fullCalendar({
+
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+
+            defaultView: 'agendaWeek',
+
+            selectable: true,
+            selectHelper: true,
+
+            select: function(start, end, allDay) {
+
+                var title = prompt('标题:');
+
+                if (title) {
+                    calendar.fullCalendar('renderEvent', {
+                            title: title,
+                            start: start,
+                            end: end,
+                            allDay: allDay
+                        },
+                        true // make the event "stick"
+                    );
+                }
+                calendar.fullCalendar('unselect');
+            },
+
+            editable: false,
+
+            events:function(start,end, timezone,callback){
+
+            $.ajax({
+           url:"user/event",
+             cache:false,
+            dataType: "json",
+            success:function(res){
+             var events =[];
+          for(i in res.data){
+            events.push({
+            title:res.data[i].title,
+            start:new Date(res.data[i].start),
+             end:new Date(res.data[i].end)
+            // end:new Date((new Date(res.data[i].end)/1000+86400)*1000),
+           });
+             }
+
+          callback(events);
+          }
+          })
+
+                }
+
+        })
+
+    });
+    </script>
+    <style type="text/css">
+    body {
+        /*margin-top: 40px;*/
+        text-align: center;
+        font-size: 12px;
+        font-family: "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
+    }
+
+    #calendar {
+        width: 900px;
+        height: 300px;
+        margin: 0 auto;
+    }
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-default" role="navigation">
+
+	<div class="navbar-header">
+		<a class="navbar-brand" id="goback1" href="#">返回</a>
+	</div>
+
+
+</nav>
+    <div id='calendar'></div>
+</body>
+
+<script>
+       $('#goback1').click(function() {
+                     //location.href("/meeting/person");
+                     window.location.href="/meeting/person";
+
+       })
+</script>
+
+</html>
