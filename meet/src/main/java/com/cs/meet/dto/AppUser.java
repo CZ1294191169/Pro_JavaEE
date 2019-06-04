@@ -21,6 +21,8 @@ public class AppUser implements Serializable {
 
     public Integer participate;
 
+    public Integer userList[];
+
     public String file;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:SS")
     public Timestamp arrangementPeriodstart;
@@ -38,7 +40,8 @@ public class AppUser implements Serializable {
                    Integer participate,
                    String file,
                    Timestamp arrangementPeriodstart,
-                   Timestamp arrangementPeriodend){
+                   Timestamp arrangementPeriodend,
+                   Integer userList[]){
         this.userName = userName;
         this.userCode = userCode;
         this.roomId = roomId;
@@ -47,5 +50,6 @@ public class AppUser implements Serializable {
         this.file = file;
         this.arrangementPeriodstart = arrangementPeriodstart;
         this.arrangementPeriodend = arrangementPeriodend;
+        this.userList = userList;
     }
 }

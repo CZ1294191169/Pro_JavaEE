@@ -25,6 +25,8 @@ public class DepartmentMeetCondition {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:SS")
     private Timestamp arrangementPeriodend;
 
+    private Integer participate;
+
 //    private String start;
 //
 //    private String end;
@@ -39,7 +41,8 @@ public class DepartmentMeetCondition {
                              String roomName,
                              String theme,
                              Timestamp arrangementPeriodstart,
-                             Timestamp arrangementPeriodend) throws ParseException {
+                             Timestamp arrangementPeriodend,
+                            Integer participate) throws ParseException {
         this.departmentId=departmentId;
         this.departmentName=departmentName;
         this.userName = userName;
@@ -47,6 +50,7 @@ public class DepartmentMeetCondition {
         this.theme=theme;
         this.arrangementPeriodstart=arrangementPeriodstart;
         this.arrangementPeriodend=arrangementPeriodend;
+        this.participate = participate;
 //       this.start= DateUtil.Convertdatetoymdhm(this.startb);
 //       this.end=DateUtil.Convertdatetoymdhm(this.endb);
     }

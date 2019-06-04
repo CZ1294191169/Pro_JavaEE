@@ -7,6 +7,7 @@ import com.cs.meet.entity.User_info;
 import com.cs.meet.services.MeetroomServices;
 import com.cs.meet.services.UserinfoServices;
 import com.cs.meet.services.affairsServices;
+import com.cs.meet.services.affpeoService;
 import com.cs.meet.util.DateUtil;
 import com.cs.meet.util.HttpServletUtil;
 import com.cs.meet.util.convertUtil;
@@ -32,8 +33,10 @@ public class TableController {
     UserinfoServices userinfoServices;
 
     @Autowired
-
     com.cs.meet.services.affairsServices affairsServices;
+
+    @Autowired
+    affpeoService  affpeoService;
 
 
 
@@ -66,6 +69,7 @@ public class TableController {
         AppUser appUser = null;
         try{
             appUser = mapper.readValue(affirs,AppUser.class);
+
             table.setUserId(user_info.getUserId());
             table.setRoomId(appUser.roomId);
             table.setAffairsStatus(0);
@@ -81,7 +85,17 @@ public class TableController {
             table.setParticipate(appUser.participate);
             table.setTheme(appUser.theme);
 
-            affairsServices.save(table);
+            Affairs_table affairsTable = affairsServices.save(table);
+
+            Integer userId = affairsTable.getUserId();
+            Integer affairsId = affairsTable.getAffairsId();
+
+            affpeoService.Insertintoaffpeo(affairsTable.getUserId(),affairsTable.getAffairsId());
+
+            for(int i=0;i<appUser.userList.length;i++){
+                affpeoService.Insertintoaffpeo(appUser.userList[i],affairsTable.getAffairsId());
+            }
+
 
             modelMap.put("success",true);
         }catch (Exception e)

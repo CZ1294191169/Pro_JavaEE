@@ -76,4 +76,7 @@ public interface affairsServices extends JpaRepository<Affairs_table,Integer> {
             nativeQuery = true)
     public List<Object[]> GetuserappList();
 
+
+
+
 }

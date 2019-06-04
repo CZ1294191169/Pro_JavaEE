@@ -11,6 +11,7 @@
     <link rel="stylesheet" th:href="@{Wizard/css/fileinput.min.css}">
     <link rel="stylesheet" th:href="@{Wizard/css/styles.css}">
     <link rel="stylesheet" th:href="@{Wizard/css/bootstrapValidator.css}">
+    <link rel="stylesheet" th:href="@{css/bootstrap-multiselect.css}">
     <!-- <link href="../css/fileinput.css" media="all" rel="stylesheet" type="text/css"/> -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" media="all" rel="stylesheet" type="text/css"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" rel="stylesheet" type="text/css">
@@ -80,6 +81,37 @@
                                             <div class="col-lg-5">
                                                 <input type="text" class="form-control" name="num" autocomplete="off"  id="participate"/>
                                             </div>
+                                            <p></p>
+                                            <p></p>
+
+                                             <div id="content" style="width:100%;height: 70%">
+                                                    <div class="row">
+                                                        <div class="col-xs-5">
+                                                            <label class="control-label col-sm-3" for="multiselect">公司员工</label>
+                                                            <select name="from" id="multiselect" class="js-multiselect form-control" size="10" multiple="multiple">
+
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-xs-2">
+                                                            <div class="row">
+                                                                <br/>
+                                                                <br/>
+                                                            <button type="button" id="js_right_All_1" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i></button>
+                                                            <button type="button" id="js_right_Selected_1" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"></i></button>
+                                                            <button type="button" id="js_left_Selected_1" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i></button>
+                                                            <button type="button" id="js_left_All_1" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i></button>
+                                                            </div>
+                                                            </div>
+
+                                                        <div class="col-xs-5">
+                                                            <label class="control-label col-sm-3" for="js_multiselect_to_1">参与人员</label>
+                                                            <select name="to" id="js_multiselect_to_1" class="form-control" size="10" multiple="multiple"></select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
                                         </div>
                                     </form>
 
@@ -144,6 +176,7 @@
        </div>  <!-- end container -->
 
        <script th:src="@{jquery.min.js}"></script>
+       <script th:src="@{js/multiselect.js}"></script>
        <script th:src="@{Wizard/bootstrapValidator.js}" type="text/javascript"></script>
        <script th:src="@{js/bootstrap.min.js}"></script>
        <script th:src="@{Wizard/bootstrap-datetimepicker.min.js}"></script>
@@ -155,6 +188,39 @@
        <script th:src="@{Wizard/themes.js}" type="text/javascript"></script>
        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" type="text/javascript"></script>
        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    jQuery(document).ready(function($) {
+        $('.js-multiselect').multiselect({//左侧选择框
+            right: '#js_multiselect_to_1',//右侧选择框id
+            rightAll: '#js_right_All_1', //全部右移
+            rightSelected: '#js_right_Selected_1',//选中右移
+            leftSelected: '#js_left_Selected_1',//选中左移
+            leftAll: '#js_left_All_1',//全部左移
+            keepRenderingSort: true //保存排序
+        });
+    });
+    $(document).ready(function () {//动态加载角色复选框
+    //加载所有复选框数据
+        //动态选中角色，根据角色的对应表
+        $.ajax({
+            type: "post",
+            url: "user/roleList",
+            traditional: true,
+            dataType : "json",
+            success:function(result){
+                    for (var i = 0; i < result.userInfoList.length; i++) {//加载未拥有的角色  这里根据后台传递的对象循环添加
+                        $("#multiselect").append("<option value='" + result.userInfoList[i].userId + "'>" + result.userInfoList[i].userName + "</option>");
+                    }
+                // for (var i = 0; i < result.userHaveRole.length; i++) {//加载已拥有的角色
+                //     $("#js_multiselect_to_1").append("<option value='" +  result.userInfoList[i].id + "'>" +  result.userInfoList[i].name + "</option>");
+                // }
+            }
+        });
+    });
+
+
+</script>
+
 
    <script>
     var Data = [];
@@ -235,6 +301,16 @@
         info.roomId=options.val();
         info.theme = $('#theme').val();
         info.participate = $('#participate').val();
+
+        var array = new Array();  //定义数组
+           $("#js_multiselect_to_1 option").each(function(){  //遍历所有option
+               var txt = $(this).val();   //获取option值
+               array.push(txt)
+
+           });
+
+           info.userList = array;
+
 
 
 

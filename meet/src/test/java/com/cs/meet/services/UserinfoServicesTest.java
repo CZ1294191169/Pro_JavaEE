@@ -38,7 +38,7 @@ public class UserinfoServicesTest {
 
     @Test
     public void tryempcode() throws Exception {
-        List<Object[]> select =userinfoServices.selectByempCode("D2U39087654");
+        List<Object[]> select =userinfoServices.selectByempCode();
         List<UserMeetCondition> test = convertUtil.castEntity(select, UserMeetCondition.class);
         Assert.assertTrue(test.size() > 0);
 

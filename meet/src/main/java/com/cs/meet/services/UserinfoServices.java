@@ -31,7 +31,7 @@ public interface UserinfoServices extends JpaRepository<User_info,Integer> {
 
     @Query(
             value = "select user_info.department_id,department_table.department_name,user_info.user_name,meeting_room.room_name,\n" +
-                    "affairs_table.theme,affairs_table.arrangement_periodstart,affairs_table.arrangement_periodend\n" +
+                    "affairs_table.theme,affairs_table.arrangement_periodstart,affairs_table.arrangement_periodend,affairs_table.participate\n" +
                     "from  affairs_table,user_info,meeting_room,department_table \n" +
                     "where affairs_table.user_id=user_info.user_id and\n" +
                     "user_info.department_id=department_table.department_id and\n" +
@@ -44,14 +44,16 @@ public interface UserinfoServices extends JpaRepository<User_info,Integer> {
 
     @Query(
             value = "select user_info.user_name,meeting_room.room_name,affairs_table.theme,affairs_table.file,affairs_table.arrangement_periodstart,affairs_table.arrangement_periodend\n" +
-                    "from affairs_table left join user_info on user_info.user_id = affairs_table.user_id\t\n" +
-                    "left join meeting_room on meeting_room.room_id = affairs_table.room_id\n" +
-                    "where emp_code=:empcode\n"+
-                    "and affairs_table.affairs_status<> 0\n"+
-                    "and affairs_table.affairs_status<> -1",
+                    "                    from affairs_table left join user_info on user_info.user_id = affairs_table.user_id \n" +
+                    "                     left join affairs_people on affairs_people.user_id = affairs_table.user_id  and affairs_people.affairs_id = affairs_table.affairs_id\n" +
+                    "                    left join meeting_room on meeting_room.room_id = affairs_table.room_id\n" +
+                    "                   \n" +
+                    "                    where affairs_table.affairs_status<> 0\n" +
+                    "                    and affairs_table.affairs_status<> -1\n" +
+                    "                    and affairs_people.affairs_id = affairs_table.affairs_id",
             nativeQuery = true
     )
-    List<Object[]> selectByempCode(@Param("empcode") String empcode);
+    List<Object[]> selectByempCode();
 
 
     @Query(
@@ -72,6 +74,14 @@ public interface UserinfoServices extends JpaRepository<User_info,Integer> {
             nativeQuery = true
     )
     List<Object[]> GetfullUser();
+
+    @Query(
+            value = "select user_id,user_name from user_info left join department_table on  department_table.department_id =  user_info.department_id\n" +
+                    "where user_info.department_id=?2 " +
+                    "and user_id<>?1",
+            nativeQuery = true
+    )
+    List<Object[]> getAppUserList(Integer userId,Integer departmentId);
 
 
 

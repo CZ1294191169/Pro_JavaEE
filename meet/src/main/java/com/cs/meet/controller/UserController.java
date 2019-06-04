@@ -3,14 +3,14 @@ package com.cs.meet.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.cs.meet.dto.*;
 import com.cs.meet.entity.Affairs_table;
+import com.cs.meet.entity.Message_log;
 import com.cs.meet.entity.User_info;
-import com.cs.meet.services.DepartmentServices;
-import com.cs.meet.services.UserinfoServices;
-import com.cs.meet.services.affairsServices;
+import com.cs.meet.services.*;
 import com.cs.meet.services.servicesImpl.UserserImpl;
 import com.cs.meet.util.*;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.bytebuddy.description.type.TypeDescription;
 import org.apache.catalina.User;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -51,6 +51,12 @@ public class UserController {
 
     @Autowired
     com.cs.meet.services.affairsServices affairsServices;
+
+    @Autowired
+    MessageServices messageServices;
+
+    @Autowired
+    affpeoService affpeopleServices;
 
 
     Random random = new Random();
@@ -95,7 +101,7 @@ public class UserController {
 
         User_info user_info = (User_info) session.getAttribute("user");
         User_info info = userser.findByUserCode(user_info.getUserCode());
-        List<Object[]> list = userinfoServices.selectByempCode(info.getEmpCode());
+        List<Object[]> list = userinfoServices.selectByempCode();
 
         if(list.size()!=0) {
             List<UserMeetCondition> userMeetConditionList = convertUtil.castEntity(list, UserMeetCondition.class);
@@ -419,6 +425,53 @@ public class UserController {
 
         return modelmap;
     }
+
+    @PostMapping("/roleList")
+    public Map<String,Object> getUserRoleList(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+        User_info user_info = new User_info();
+        Affairs_table affairs_table = new Affairs_table();
+        user_info = (User_info) session.getAttribute("user");
+        user_info = userinfoServices.findByUserCode(user_info.getUserCode());
+        Map<String,Object> modelmap = new HashMap<>();
+        List<Affpeocondition> userInfoList = new ArrayList<>();
+        List<Object[]> objects = userinfoServices.getAppUserList(user_info.getUserId(),user_info.getDepartmentId());
+        userInfoList = convertUtil.castEntity(objects,Affpeocondition.class);
+        try {
+            modelmap.put("userInfoList",userInfoList);
+            modelmap.put("success",true);
+
+        }catch (Exception e){
+            modelmap.put("success",false);
+        }
+
+        return modelmap;
+    }
+
+    @PostMapping("/updatestatus")
+    public Map<String,Object>updateStatus(HttpSession session,@RequestBody JSONObject jsonParam)
+    {
+        User_info user_info = new User_info();
+        Affairs_table affairs_table = new Affairs_table();
+        user_info = (User_info) session.getAttribute("user");
+        user_info = userinfoServices.findByUserCode(user_info.getUserCode());
+        Map<String,Object> modelmap = new HashMap<>();
+
+
+
+
+
+        try{
+            affpeopleServices.updateStatus(Integer.parseInt( jsonParam.getString("peopleId")));
+            modelmap.put("success",true);
+        }catch (Exception e){
+            modelmap.put("success",false);
+        }
+
+        return modelmap;
+    }
+
+
+
 
 
 //    public List<User> getUserListPage(User user, HttpServletRequest request, HttpSession session) throws Exception {

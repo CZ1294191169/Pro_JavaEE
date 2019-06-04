@@ -31,6 +31,8 @@ public class affairsServicesTest {
 
        System.out.println(affaircheckconditions.size());
 
+
+
        System.out.println(affaircheckconditions.get(0).getRoomName());
     }
 

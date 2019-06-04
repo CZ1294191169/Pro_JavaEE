@@ -123,6 +123,7 @@ public class AdminController {
         System.out.println(jsonParam.getString("userStatus"));
 
         User_info confirm = userinfoServices.findByUserName(jsonParam.getString("userName"));
+
         confirm.setUserName(jsonParam.getString("userName"));
         confirm.setEmpCode(jsonParam.getString("empCode"));
         confirm.setDepartmentId(Integer.parseInt(jsonParam.getString("departmentId")));

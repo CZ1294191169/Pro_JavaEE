@@ -182,7 +182,7 @@ public class UserserImpl implements UserinfoServices {
     }
 
     @Override
-    public List<Object[]> selectByempCode(String empcode) {
+    public List<Object[]> selectByempCode() {
         return null;
     }
 
@@ -193,6 +193,11 @@ public class UserserImpl implements UserinfoServices {
 
     @Override
     public List<Object[]> GetfullUser() {
+        return null;
+    }
+
+    @Override
+    public List<Object[]> getAppUserList(Integer userId, Integer departmentId) {
         return null;
     }
 
