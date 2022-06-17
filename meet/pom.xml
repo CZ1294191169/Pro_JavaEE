@@ -69,7 +69,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.47</version>
+            <version>1.2.83</version>
         </dependency>
 
         <!--添加了Google的kaptcha验证码依赖-->
